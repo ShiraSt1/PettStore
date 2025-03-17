@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="home.js"></script>
+</head>
+<body>
+    <label for="login_username">User Name</label>
+    <input id="login_username" type="text" />
+    <br /><br />
+    <label for="login_password">Password</label>
+    <input id="login_password" type="password" />
+
+    <button onclick="logIn()">Log In</button>
+    <br /><br />
+    <button onclick="newUser()">New User</button>
+    <br /><br />
+    <br /><br />
+    <br /><br />
+    <div id="newUser" style="visibility :hidden">
+        <label for="username">User Name</label>
+        <input id="username" type="text" />
+        <br /><br />
+        <label for="password">Password</label>
+        <input id="password" type="password" />
+        <br /><br />
+        <label for="firstname">First Name</label>
+        <input id="firstname" type="text" />
+        <br /><br />
+        <label for="lastname">Last Name</label>
+        <input id="lastname" type="text" />
+        <button onclick="signUp()">Sign Up</button>
+    </div>
+
+</body>
+</html>
