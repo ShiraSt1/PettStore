@@ -1,0 +1,4 @@
+{"userId":1,"username":"shira","password":"shira","firstname":"shira","lastname":"shira"}
+{"userId":2,"username":"stern","password":"stern","firstname":"stern","lastname":"stern"}
+{"userId":3,"username":"ruth","password":"ruth","firstname":"ruth","lastname":"ruth"}
+{"userId":4,"username":"hermelin","password":"hermelin","firstname":"hermelin","lastname":"hermelin"}
