@@ -1,6 +1,6 @@
 ﻿using System.Security.Principal;
 
-namespace pettsStore
+namespace Entities
 {
     public class User
     {
@@ -9,7 +9,6 @@ namespace pettsStore
         public string password { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
-
 
     }
 }

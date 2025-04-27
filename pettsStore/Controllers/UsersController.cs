@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Entities;
+using Microsoft.AspNetCore.Mvc;
+using Services;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Text.Json;
-
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace pettsStore.Controllers
@@ -12,6 +13,8 @@ namespace pettsStore.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        UserService userService = new UserService();
+
         private static readonly List<User> users = new List<User>();
         // GET: api/<UsersController>
         [HttpGet]
@@ -31,53 +34,39 @@ namespace pettsStore.Controllers
         [HttpPost]
         public ActionResult<User> Post([FromBody] User user)
         {
-            int numberOfUsers = System.IO.File.ReadLines("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt").Count();
-            user.userId = numberOfUsers + 1;
-            string userJson = JsonSerializer.Serialize(user);
-            System.IO.File.AppendAllText("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt", userJson + Environment.NewLine);
-            return CreatedAtAction(nameof(Get), new { id = user.userId }, user);
+            User newUser = userService.addUser(user);
+            return CreatedAtAction(nameof(Get), new { id = user.userId }, newUser);
         }
 
         [HttpPost("login")]
         public ActionResult<User> Login([FromBody] User newUser)
         {
-            using (StreamReader reader = System.IO.File.OpenText("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt"))
+            User user = userService.login(newUser);
+            if(user!= null)
             {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-                    User user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user.username == newUser.username && user.password == newUser.password)
-                        return Ok(user);
-                }
+                return Ok(user);
             }
             return NotFound(new { Message = "User not found." });
         }
 
+        [Route("password")]
+        [HttpPost]
+        public ActionResult<User> CheckPasswordStrength([FromBody] string password)
+        {
+            int strength = userService.GetPassStrength(password);
+            return Ok(strength);
+        }
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]User userUpdate)
+        public ActionResult<User> Put(int id, [FromBody]User userUpdate)
         {
-            string textToReplace = string.Empty;
-            using (StreamReader reader = System.IO.File.OpenText("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt"))
+            User user=userService.updateUser(id, userUpdate);
+            if(user != null)
             {
-                string currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-
-                    User user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user.userId == id)
-                        textToReplace = currentUserInFile;
-                }
+                return Ok(user);
             }
-
-            if (textToReplace != string.Empty)
-            {
-                string text = System.IO.File.ReadAllText("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt");
-                text = text.Replace(textToReplace, JsonSerializer.Serialize(userUpdate));
-                System.IO.File.WriteAllText("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt", text);
-            }
+            return NotFound(new { Message = "User not found." });
         }
 
         // DELETE api/<UsersController>/5

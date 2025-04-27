@@ -20,7 +20,7 @@ logIn = async () => {
         }
         const user = await response.json();
         sessionStorage.setItem("user", JSON.stringify(user));
-        return window.location.href="https://localhost:7058/site.html"
+        return window.location.href ="https://localhost:7058/site.html"
     } catch (error) {
         alert(error.message);
     }
@@ -49,6 +49,16 @@ const signUp = async () => {
     }   catch (error) {
         alert(error.message);
     }
+};
+
+checkPassword = async () => {
+    const password = document.getElementById("password").value;
+    const response = await fetch('https://localhost:7058/api/users/password',
+        { method: 'POST', body: JSON.stringify(password), headers: { "Content-Type": 'application/json' } })
+    if (!response.ok)
+        throw new Error("Http error. status:" + response.status);
+    const passStrength = await response.json()
+    alert(passStrength > 2 ? "Password is strong" : "Password is weak")
 };
 
 const update = async () => {
@@ -82,4 +92,4 @@ const update = async () => {
     } catch (error) {
         alert(error.message);
     }
-};
+}; 
