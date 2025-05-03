@@ -13,7 +13,11 @@ namespace pettsStore.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        UserService userService = new UserService();
+        IUserService UserService;
+        public UsersController(IUserService userService)
+        {
+            UserService = userService;
+        }
 
         private static readonly List<User> users = new List<User>();
         // GET: api/<UsersController>
