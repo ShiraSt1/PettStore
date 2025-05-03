@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         //public User getUserById(int id){}
 

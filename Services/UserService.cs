@@ -4,10 +4,13 @@ using System.Text.Json;
 
 namespace Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
-        UserRepository userRepository=new UserRepository();
-        //public User getUserById(int id){}
+        IUserRepository userRepository;
+        public UserService(IUserRepository userRepository)
+        {
+            this.userRepository = userRepository;
+        }
 
         public User addUser(User user)
         {
