@@ -15,19 +15,6 @@ namespace pettsStore.Controllers
         {
             _OrderService = orderService;
         }
-        // GET: api/<OrdersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<OrdersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         // POST api/<OrdersController>
         [HttpPost]
@@ -36,18 +23,6 @@ namespace pettsStore.Controllers
             OrderDTO newOrder = await _OrderService.addOrder(order);
             return newOrder;
             //return CreatedAtAction(nameof(Get), new { id = order.Id }, newOrder);
-        }
-
-        // PUT api/<OrdersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<OrdersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

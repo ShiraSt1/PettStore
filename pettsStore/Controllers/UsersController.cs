@@ -73,10 +73,6 @@ namespace pettsStore.Controllers
             }
             return NotFound(new { Message = "User not found." });
         }
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }
