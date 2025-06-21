@@ -1,61 +1,42 @@
-﻿
-using Entities;
+﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace Repositories
 {
     public class UserRepository : IUserRepository
     {
-        //public User getUserById(int id){}
-
-        public User addUser(User user)
+        PettsStore_DataBaseContext _pettsStore_DataBaseContext;
+        public UserRepository(PettsStore_DataBaseContext pettsStore_DataBaseContext)
         {
-            int numberOfUsers = System.IO.File.ReadLines("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt").Count();
-            user.userId = numberOfUsers + 1;
-            string userJson = JsonSerializer.Serialize(user);
-            System.IO.File.AppendAllText("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt", userJson + Environment.NewLine);
+            _pettsStore_DataBaseContext = pettsStore_DataBaseContext;
+        }
+        public async Task<User> getUserById(int id)
+        {
+            User user= await _pettsStore_DataBaseContext.Users.FirstOrDefaultAsync(user=>user.Id==id);
             return user;
         }
-
-        public User updateUser(int id, User userUpdate)
+        public async Task<List<User>> getAllUsers()
         {
-            string textToReplace = string.Empty;
-            using (StreamReader reader = System.IO.File.OpenText("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt"))
-            {
-                string currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-
-                    User user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user.userId == id)
-                        textToReplace = currentUserInFile;
-                }
-            }
-
-            if (textToReplace != string.Empty)
-            {
-                string text = System.IO.File.ReadAllText("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt");
-                text = text.Replace(textToReplace, JsonSerializer.Serialize(userUpdate));
-                System.IO.File.WriteAllText("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt", text);
-            }
-
+            return await _pettsStore_DataBaseContext.Users.ToListAsync();
+        }
+        public async Task<User> addUser(User user)
+        {
+            await _pettsStore_DataBaseContext.Users.AddAsync(user);
+            await _pettsStore_DataBaseContext.SaveChangesAsync();
+            return user;
+        }
+        public async Task<User> updateUser(int id, User userUpdate)
+        {
+            _pettsStore_DataBaseContext.Users.Update(userUpdate);
+             await _pettsStore_DataBaseContext.SaveChangesAsync();
             return userUpdate;
+         
         }
-
-        public User login(User newUser)
+        public async Task<User> login(User newUser)
         {
-            using (StreamReader reader = System.IO.File.OpenText("C:\\Users\\shiri\\Desktop\\14th grade\\API\\pettsStore\\users.txt"))
-            {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-                    User user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user.username == newUser.username && user.password == newUser.password)
-                        return user;
-                }
-            }
-            return null;
+            User user=await _pettsStore_DataBaseContext.Users.FirstOrDefaultAsync(user => user.Username == newUser.Username && user.Password == newUser.Password);
+            return user;
         }
-
     }
 }
