@@ -60,5 +60,63 @@ namespace TestPettsStore
             Assert.Equal(userDTO.LastName, result.LastName);
             Assert.Equal(userDTO.UserName, result.UserName);
         }
+
+        [Fact]
+        public async Task Login_UserNotFound_LogsWarning()
+        {
+            // Arrange
+            var loginDto = new UserLoginDTO( "wrongpass", "ruth" );
+
+            _mapperMock.Setup(m => m.Map<UserLoginDTO, User>(loginDto)).Returns(new User { Username = "ruth" });
+            _userRepositoryMock.Setup(r => r.login(It.IsAny<User>())).ReturnsAsync((User)null);
+
+            var service = new UserService(_userRepositoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+
+            // Act
+            var result = await service.login(loginDto);
+
+            // Assert
+            Assert.Null(result);
+
+            _loggerMock.Verify(
+                x => x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Login failed")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [Fact]
+        public async Task Login_UserFound_LogsInformation()
+        {
+            // Arrange
+            var loginDto = new UserLoginDTO ( "1234" , "ruth");
+            var user = new User { Id = 1, Username = "ruth" };
+            var userDto = new UserDTO(1, "Ruth", "Hermelin", "ruth");
+
+            _mapperMock.Setup(m => m.Map<UserLoginDTO, User>(loginDto)).Returns(user);
+            _userRepositoryMock.Setup(r => r.login(user)).ReturnsAsync(user);
+            _mapperMock.Setup(m => m.Map<User, UserDTO>(user)).Returns(userDto);
+
+            var service = new UserService(_userRepositoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+
+            // Act
+            var result = await service.login(loginDto);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(userDto.UserName, result.UserName);
+
+            _loggerMock.Verify(
+                x => x.Log(
+                    LogLevel.Information,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("logged in successfully")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
     }
 }

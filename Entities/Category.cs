@@ -18,6 +18,5 @@ public partial class Category
     public string CategoryName { get; set; }
 
     [InverseProperty("Ctegory")]
-    [JsonIgnore]
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }

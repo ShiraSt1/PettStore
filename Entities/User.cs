@@ -16,7 +16,7 @@ public partial class User
     public int Id { get; set; }
 
     [Column("firstname")]
-    [StringLength(50)]
+    [StringLength(50, MinimumLength = 2)]
     public string Firstname { get; set; }
 
     [Column("password")]
@@ -25,6 +25,7 @@ public partial class User
 
     [Column("username")]
     [StringLength(50)]
+    [EmailAddress(ErrorMessage = "Invalid email address.")]
     public string Username { get; set; }
 
     [Column("lastname")]

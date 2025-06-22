@@ -33,10 +33,8 @@ public partial class Product
 
     [ForeignKey("CtegoryId")]
     [InverseProperty("Products")]
-    [JsonIgnore]
     public virtual Category Ctegory { get; set; }
 
     [InverseProperty("Product")]
-    [JsonIgnore]
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

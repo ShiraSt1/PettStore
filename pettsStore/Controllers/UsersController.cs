@@ -40,7 +40,7 @@ namespace pettsStore.Controllers
                 return newUser;
             }catch(ArgumentException ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
            
             //return CreatedAtAction(nameof(Get), new { id = user.Id }, newUser);
@@ -66,12 +66,20 @@ namespace pettsStore.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<UserDTO>> Put(int id, [FromBody] UserRegisterDTO userUpdate)
         {
-            UserDTO user =await _UserService.updateUser(id, userUpdate);
-            if(user != null)
+            try
             {
-                return Ok(user);
+                UserDTO user = await _UserService.updateUser(id, userUpdate);
+                if (user != null)
+                {
+                    return Ok(user);
+                }
+                return NotFound(new { message = "User not found." });
             }
-            return NotFound(new { Message = "User not found." });
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            
         }
         
     }

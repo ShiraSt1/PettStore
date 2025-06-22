@@ -4,6 +4,7 @@ using Entities;
 using Repositories;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 
 namespace Services
 {
@@ -21,6 +22,17 @@ namespace Services
 
         public async Task<UserDTO> addUser(UserRegisterDTO user)
         {
+            if(user.FirstName.Length<2 ||user.FirstName.Length>50)
+            {
+                _logger.LogWarning("FirstName {FirstName} is out of range", user.FirstName);
+                throw new ArgumentException("FirstName is not valid.");
+            }
+            if (!IsValidEmail(user.UserName))
+            {
+                _logger.LogWarning("Invalid email: {Email}", user.UserName);
+                throw new ArgumentException("Email is not valid.");
+            }
+
             if (!GetPassStrength(user.Password))
             {
                 throw new ArgumentException("Password is not strong enough. It must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
@@ -30,6 +42,21 @@ namespace Services
 
         public async Task<UserDTO> updateUser(int id, UserRegisterDTO userUpdate)
         {
+            if (userUpdate.FirstName.Length < 2 || userUpdate.FirstName.Length > 50)
+            {
+                _logger.LogWarning("FirstName {FirstName} is out of range", userUpdate.FirstName);
+                throw new ArgumentException("FirstName is not valid.");
+            }
+            if (!IsValidEmail(userUpdate.UserName))
+            {
+                _logger.LogWarning("Invalid email: {Email}", userUpdate.UserName);
+                throw new ArgumentException("Email is not valid.");
+            }
+
+            if (!GetPassStrength(userUpdate.Password))
+            {
+                throw new ArgumentException("Password is not strong enough. It must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            }
             return _mapper.Map<User, UserDTO>(await userRepository.updateUser(id, _mapper.Map<UserRegisterDTO, User>(userUpdate)));
         }
 
@@ -59,6 +86,10 @@ namespace Services
         public async Task<List<UserDTO>> getAllUsers()
         {
             return _mapper.Map<List<User>, List<UserDTO>>(await userRepository.getAllUsers());
+        }
+        private bool IsValidEmail(string email)
+        {
+            return new EmailAddressAttribute().IsValid(email);
         }
     }
 }
