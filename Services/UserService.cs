@@ -10,7 +10,7 @@ namespace Services
 {
     public class UserService : IUserService
     {
-        IUserRepository userRepository;
+        IUserRepository userRepository;//_ userRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<UserService> _logger;
         public UserService(IUserRepository userRepository, IMapper mapper, ILogger<UserService> logger)
@@ -20,7 +20,7 @@ namespace Services
             _logger = logger;
         }
 
-        public async Task<UserDTO> addUser(UserRegisterDTO user)
+        public async Task<UserDTO> AddUser(UserRegisterDTO user) // Change to PascalCase: AddUser
         {
             if(user.FirstName.Length<2 ||user.FirstName.Length>50)
             {
@@ -39,8 +39,7 @@ namespace Services
             }
             return _mapper.Map<User, UserDTO>(await userRepository.addUser(_mapper.Map<UserRegisterDTO, User>(user)));
         }
-
-        public async Task<UserDTO> updateUser(int id, UserRegisterDTO userUpdate)
+        public async Task<UserDTO> UpdateUser(int id, UserRegisterDTO userUpdate) // Change to PascalCase: UpdateUser
         {
             if (userUpdate.FirstName.Length < 2 || userUpdate.FirstName.Length > 50)
             {
@@ -79,11 +78,11 @@ namespace Services
             return result >= 3;
         }
 
-        public async Task<UserDTO> getUserById(int id)
+        public async Task<UserDTO> getUserById(int id)//GetUserById
         {
             return _mapper.Map<User, UserDTO>(await userRepository.getUserById(id));
         }
-        public async Task<List<UserDTO>> getAllUsers()
+        public async Task<List<UserDTO>> getAllUsers()//GetAllUsers
         {
             return _mapper.Map<List<User>, List<UserDTO>>(await userRepository.getAllUsers());
         }

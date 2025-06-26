@@ -15,12 +15,12 @@ namespace Repositories
         {
             _pettsStore_DataBaseContext = pettsStore_DataBaseContext;
         }
-        public async Task<Product> getProductById(int id)
+        public async Task<Product> GetProductById(int id)
         {
-            Product product = await _pettsStore_DataBaseContext.Products.FirstOrDefaultAsync(product => product.Id == id);
-            return product;
+            return await _pettsStore_DataBaseContext.Products.FirstOrDefaultAsync(product => product.Id == id);
+           
         }
-        public async Task<List<Product>> getAllProducts(string? desc,int? minPrice, int? maxPrice, int?[] categoryIds)
+        public async Task<List<Product>> GetAllProducts(string? desc,int? minPrice, int? maxPrice, int?[] categoryIds)
         {
             var query = _pettsStore_DataBaseContext.Products.Where(product =>
             (desc == null ? (true) : (product.ProductDescription.Contains(desc)))

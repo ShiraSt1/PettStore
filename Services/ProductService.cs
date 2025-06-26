@@ -12,7 +12,7 @@ namespace Services
 {
     public class ProductService : IProductService
     {
-        IProductRepository productRepository;
+        IProductRepository productRepository;//_ productRepository;
         IMapper _mapper;
         public ProductService(IProductRepository productRepository, IMapper mapper)
         {
@@ -20,11 +20,11 @@ namespace Services
             _mapper = mapper;
         }
 
-        public async Task<ProductDTO> getProductById(int id)
+        public async Task<ProductDTO> GetProductById(int id) // Change to PascalCase: GetProductById
         {
             return _mapper.Map<Product, ProductDTO>(await productRepository.getProductById(id));
         }
-        public async Task<List<ProductDTO>> getAllProducts(string? desc, int? minPrice, int? maxPrice, int?[] categoryIds)
+        public async Task<List<ProductDTO>> GetAllProducts(string? desc, int? minPrice, int? maxPrice, int?[] categoryIds) // Change to PascalCase: GetAllProducts
         {
             return _mapper.Map<List<Product>, List<ProductDTO>>(await productRepository.getAllProducts(desc, minPrice, maxPrice, categoryIds));
         }

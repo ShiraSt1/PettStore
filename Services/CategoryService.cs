@@ -14,7 +14,7 @@ namespace Services
 {
     public class CategoryService : ICategoryService
     {
-        ICategoryRepository categoryRepository;
+        ICategoryRepository categoryRepository;//_ categoryRepository;
         private readonly IMapper _mapper;
 
         public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
@@ -22,11 +22,11 @@ namespace Services
             this.categoryRepository = categoryRepository;
             _mapper = mapper;
         }
-        public async Task<CategoryDTO> getCategoryById(int id)
+        public async Task<CategoryDTO> getCategoryById(int id)// Changed to PascalCase
         {
             return _mapper.Map<Category, CategoryDTO>(await categoryRepository.getCategoryById(id));
         }
-        public async Task<List<CategoryDTO>> getAllCategories()
+        public async Task<List<CategoryDTO>> GetAllCategories() // Changed to PascalCase
         {
             return _mapper.Map<List<Category>, List<CategoryDTO>>(await categoryRepository.getAllCategories());
         }

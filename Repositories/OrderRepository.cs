@@ -13,7 +13,7 @@ namespace Repositories
         {
             _pettsStore_DataBaseContext = pettsStore_DataBaseContext;
         }
-        public async Task<Order> addOrder(Order order)
+        public async Task<Order> AddOrder(Order order) // Change to PascalCase: AddOrder 
         {
             await _pettsStore_DataBaseContext.Orders.AddAsync(order);
             await _pettsStore_DataBaseContext.SaveChangesAsync();
