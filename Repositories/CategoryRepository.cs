@@ -15,12 +15,11 @@ namespace Repositories
         {
             _pettsStore_DataBaseContext = pettsStore_DataBaseContext;
         }
-        public async Task<Category> getCategoryById(int id)
+        public async Task<Category> GetCategoryById(int id)
         {
-            Category category = await _pettsStore_DataBaseContext.Categories.FirstOrDefaultAsync(category => category.Id == id);
-            return category;
+            return await _pettsStore_DataBaseContext.Categories.FirstOrDefaultAsync(category => category.Id == id);
         }
-        public async Task<List<Category>> getAllCategories()
+        public async Task<List<Category>> getAllCategories()//GetAllCategories
         {
             return await _pettsStore_DataBaseContext.Categories.ToListAsync();
         }

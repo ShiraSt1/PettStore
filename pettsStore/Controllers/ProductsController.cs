@@ -2,7 +2,7 @@
 using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services;
-
+//delete unsuded code
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace pettsStore.Controllers
@@ -11,7 +11,7 @@ namespace pettsStore.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        IProductService _ProductService;
+        IProductService _ProductService;//_ productService;
         public ProductsController(IProductService productsService)
         {
             _ProductService = productsService;
